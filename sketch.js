@@ -11,7 +11,7 @@ var bird, slingshot;
 var gameState = "onSling";
 
 function preload() {
-    backgroundImg = loadImage("sprites/bg.png");
+    changeBackground();
 }
 
 function setup(){
@@ -45,6 +45,9 @@ function setup(){
 }
 
 function draw(){
+  if(backgroundImg){
+
+  
     background(backgroundImg);
     Engine.update(engine);
     //strokeWeight(4);
@@ -68,7 +71,7 @@ function draw(){
     //log6.display();
     slingshot.display();    
 }
-
+    }   
 function mouseDragged(){
     if (gameState!=="launched"){
         Matter.Body.setPosition(bird.body, {x: mouseX , y: mouseY});
@@ -85,4 +88,26 @@ function keyPressed(){
     if(keyCode === 32){
        // slingshot.attach(bird.body);
     }
+}
+
+async function changeBackground(){
+
+    var info = await fetch("http://worldclockapi.com/api/json/est/now");
+    var infoJ = await info.json();
+    console.log(infoJ);
+
+    var datetime = infoJ.currentDateTime;
+    console.log(datetime);
+
+    var hour = datetime.slice(11,13);
+    console.log(hour);
+
+    if(hour>=07 && hour<=18) {
+        bg = "sprites/bg.png"
+    }
+    else{
+        bg = "sprites/bg2.jpg"
+    }
+
+    backgroundImg=loadImage(bg);
 }
